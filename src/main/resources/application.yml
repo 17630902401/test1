@@ -1,0 +1,30 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: reggie_take_out
+  datasource:
+    druid:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: root
+  servlet:
+    session:
+      persistent: true #持久化session->硬盘上
+    multipart:
+      max-file-size: 20MB
+
+
+mybatis-plus:
+  configuration:
+    #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
+    map-underscore-to-camel-case: true
+    #打印MP动态生产的SQL语句
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: ASSIGN_ID #ID的生成方式：雪花算法
+reggie:
+  path: E:\Test\108期\项目一瑞吉点餐\reggie_take_out\src\main\resources\static\backend\images\image\
