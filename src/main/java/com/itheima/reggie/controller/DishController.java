@@ -60,6 +60,9 @@ public class DishController {
         //insert into dish_falvor
         dishService.saveWithFlavor(dishDto);
 
+        //清理某个分类下面的菜品缓存数据
+        String key = "dish_" + dishDto.getCategoryId() + "_1";
+        redisTemplate.delete(key);
 
         return R.success("新增菜品成功");
     }
@@ -147,6 +150,9 @@ public class DishController {
     public R<String> update(@RequestBody DishDto dishDto) {
         log.info(dishDto.toString());
         dishService.updateWithFlavor(dishDto);
+        //清理某个分类下面的菜品缓存数据
+        String key = "dish_" + dishDto.getCategoryId() + "_1";
+        redisTemplate.delete(key);
         return R.success("修改菜品成功");
     }
 
@@ -158,9 +164,26 @@ public class DishController {
      */
     @DeleteMapping
     public R<String> delete(@RequestParam List<Long> ids) {
-        log.info("ids:{}", ids);
+//        log.info("ids:{}", ids);
+//        dishService.removeByIds(ids);
+//        return R.success("菜品数据删除成功");
+        //1、遍历菜品集合，然后根据菜品ID查询出菜品分类的ID
+        ids.forEach(id -> {
+            Dish dish = dishService.getById(id);
+            //2、获取分类ID，组装Redis中key
+            //清理某个分类下面的菜品缓存数据
+            String key = "dish_" + dish.getCategoryId() + "_1";
+            redisTemplate.delete(key);
+        });
+
+
+        //第二种暴力清除方式：
+        //Set keys = redisTemplate.keys("dish_*"); //获取所有以dish_xxx开头的key
+        //redisTemplate.delete(keys); //删除这些key
+
+        //3、批量删除菜品相关信息
         dishService.removeByIds(ids);
-        return R.success("菜品数据删除成功");
+        return R.success("成功");
     }
 
 

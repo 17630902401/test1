@@ -3,12 +3,14 @@ package com.itheima.reggie.common;
 import com.itheima.reggie.pojo.Employee;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 通用返回结果，服务端响应的数据最终都会封装成此对象
  * @param <T>
  */
 @Data
-public class R<T> {// T:type类型, E:element元素
+public class R<T> implements Serializable {// T:type类型, E:element元素
     private Integer code; //编码：1成功，0和其它数字为失败
     private String msg; //错误信息
     private T data; //数据
