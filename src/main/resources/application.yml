@@ -38,4 +38,4 @@ mybatis-plus:
     db-config:
       id-type: ASSIGN_ID #ID的生成方式：雪花算法
 reggie:
-  path: E:\Test\108期\项目一瑞吉点餐\reggie_take_out\src\main\resources\static\backend\images\image\
+  path: E:\Test\108期\项目一瑞吉点餐\reggie_take_out\src\main\resources\backend\images\image\
