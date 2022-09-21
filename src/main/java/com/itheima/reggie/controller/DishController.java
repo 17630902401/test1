@@ -2,7 +2,9 @@ package com.itheima.reggie.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.itheima.reggie.common.CustomException;
 import com.itheima.reggie.common.R;
 import com.itheima.reggie.dto.DishDto;
 import com.itheima.reggie.pojo.Category;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -238,6 +241,22 @@ public class DishController {
         //设置60分钟自动过期
         redisTemplate.opsForValue().set(key, dishDtoList, 60, TimeUnit.MINUTES);
         return R.success(dishDtoList);
+    }
+
+    /**
+     * 启售、停售菜品(包括批量操作)
+     */
+    @PostMapping("/status/{flag}")
+    public R<String> status(@PathVariable Integer flag,String[] ids){
+        log.info("flag:{},ids:{}",flag, Arrays.toString(ids));
+        if (ids == null || ids.length == 0){
+            throw new CustomException("参数有误");
+        }
+        LambdaUpdateWrapper<Dish> qw = new LambdaUpdateWrapper<>();
+        qw.set(Dish::getStatus,flag).in(Dish::getId,ids);
+        dishService.update(qw);
+        String s = flag == 0 ? "已售停" : "已起售";
+        return R.success(s);
     }
 }
 

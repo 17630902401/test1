@@ -29,7 +29,9 @@ spring:
   cache:
     redis:
       time-to-live: 1800000 #设置缓存数据的过期时间，单位毫秒
-
+  main:
+    banner-mode: off #关闭springBoot启动图表
+#mybatis-plus日志控制台输出
 mybatis-plus:
   configuration:
     #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
@@ -39,5 +41,6 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: ASSIGN_ID #ID的生成方式：雪花算法
+    banner: off #关闭mybatisplus启动图标
 reggie:
   path: E:\Test\108期\项目一瑞吉点餐\reggie_take_out\src\main\resources\backend\images\image\
